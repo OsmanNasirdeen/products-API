@@ -22,11 +22,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", getAllProducts);
-app.get("/:productName", getProductByName);
-app.post("/products", addProduct);
+app.get("/products/:productName", getProductByName);
+app.post("/products/addProduct", addProduct);
 
 // users routes
-app.get("/users", getAllUsers);
+app.get("/users/allUsers", getAllUsers);
 app.post("/users/signUp", addUser);
 app.post("/users/logIn", getUser);
 
