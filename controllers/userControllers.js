@@ -13,6 +13,28 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
+    const { email } = req.body;
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+
+        msg: `user with email ${email} is not found in database`,
+      });
+    }
+    res
+      .status(200)
+      .json({ user, auth: true, success: true, msg: "user authenticated" });
+    // if (user && (await bcrypt.compare(password, user.password))) {
+    // }
+    // res.status(401).json({ auth: false, msg: "invalid password" });
+  } catch (error) {
+    res.status(500).json({ msg: error, success: false });
+  }
+};
+
+const logIn = async (req, res) => {
+  try {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email });
     if (!user) {
@@ -39,7 +61,7 @@ const getUser = async (req, res) => {
   }
 };
 
-const addUser = async (req, res) => {
+const signUp = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   encryptedUserPassword = await bcrypt.hash(password, 10);
   const existingUser = await userModel.findOne({ email });
@@ -75,4 +97,4 @@ const addUser = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, getUser, addUser };
+module.exports = { getAllUsers, getUser, logIn, signUp };
